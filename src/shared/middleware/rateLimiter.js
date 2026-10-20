@@ -10,5 +10,6 @@ const limiter = rateLimit({
         message: 'Too many requests, please try again later.',
 }
 });
+//  enable app.set('trust proxy', 1) in production when behind reverse proxy
 
 export default limiter;
