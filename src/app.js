@@ -8,6 +8,7 @@ import errorHandler from './shared/middleware/errorHandler.js';
 import limiter from './shared/middleware/rateLimiter.js';
 import authRoutes from './modules/auth/auth.routes.js';
 import roomRoutes from './modules/room/room.routes.js';
+import executionRoutes from './modules/execution/execution.routes.js';
 
 const app = express();
 
@@ -40,6 +41,7 @@ app.get('/health', (req, res) => {
 
 app.use('/api/auth', authRoutes);
 app.use('/api/rooms', roomRoutes);
+app.use('/api/execute', executionRoutes);
 
 app.use(errorHandler);
 

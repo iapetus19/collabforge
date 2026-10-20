@@ -50,7 +50,7 @@ export const registerUser = async ({ username, email, password }) => {
 };
 
 export const loginUser = async ({ email, password }) => {
-  const user = await User.findOne({ email });
+   const user = await User.findOne({ email }).select('+password');
   if (!user) {
     throw new AppError('Invalid email or password', ERROR_CODES.UNAUTHORIZED);
   }
