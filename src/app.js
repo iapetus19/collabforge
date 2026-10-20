@@ -7,6 +7,7 @@ import cookieParser from 'cookie-parser';
 import errorHandler from './shared/middleware/errorHandler.js';
 import limiter from './shared/middleware/rateLimiter.js';
 import authRoutes from './modules/auth/auth.routes.js';
+import roomRoutes from './modules/room/room.routes.js';
 
 const app = express();
 
@@ -38,6 +39,7 @@ app.get('/health', (req, res) => {
 });
 
 app.use('/api/auth', authRoutes);
+app.use('/api/rooms', roomRoutes);
 
 app.use(errorHandler);
 
