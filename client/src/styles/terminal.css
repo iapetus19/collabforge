@@ -1,0 +1,105 @@
+.terminal-card {
+  width: 390px;
+  background: var(--surface);
+  border: var(--border);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-hard);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.terminal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--s-2) var(--s-3);
+  background: var(--surface-alt);
+  border-bottom: var(--border);
+}
+
+.terminal-output {
+  flex: 1;
+  padding: var(--s-3);
+  background: var(--surface);
+  font-family: var(--font-code);
+  font-size: var(--fs-xs);
+  line-height: 1.6;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  color: var(--ink);
+}
+
+.terminal-log-row {
+  margin-bottom: var(--s-2);
+  padding: var(--s-1) var(--s-2);
+  border-radius: var(--r-sm);
+}
+
+.terminal-log-cmd {
+  background: var(--surface-alt);
+  border: 1.5px solid var(--ink);
+  font-weight: var(--fw-bold);
+  color: var(--ink);
+}
+
+.terminal-log-stderr {
+  background: var(--danger);
+  border: 1.5px solid var(--ink);
+  font-weight: var(--fw-bold);
+  color: var(--ink);
+}
+
+.terminal-log-meta {
+  background: var(--success);
+  border: 1.5px solid var(--ink);
+  font-weight: var(--fw-bold);
+  color: var(--ink);
+}
+
+.terminal-log-system {
+  color: var(--ink-muted);
+  border-bottom: 1px dashed var(--ink-muted);
+  padding-bottom: var(--s-2);
+}
+
+.terminal-log-stdout {
+  color: var(--ink);
+}
+
+.terminal-input-row {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  padding: var(--s-2) var(--s-3);
+  border-top: var(--border);
+  background: var(--surface-alt);
+  font-family: var(--font-code);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  color: var(--ink);
+}
+
+.terminal-prompt-symbol {
+  background: var(--accent);
+  border: 1.5px solid var(--ink);
+  border-radius: var(--r-sm);
+  padding: 0 var(--s-1);
+  color: var(--ink);
+}
+
+.terminal-input {
+  flex: 1;
+  background: var(--surface);
+  border: var(--border);
+  border-radius: var(--r-sm);
+  padding: var(--s-1) var(--s-2);
+  color: var(--ink);
+  outline: none;
+}
+
+.terminal-input:focus {
+  box-shadow: 0 0 0 2px var(--accent);
+}

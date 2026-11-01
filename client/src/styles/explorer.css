@@ -1,0 +1,173 @@
+.explorer-panel {
+  width: 260px;
+  background: var(--surface);
+  border: var(--border);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-hard);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  flex-shrink: 0;
+  user-select: none;
+  overflow: hidden;
+}
+
+.explorer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--s-2) var(--s-3);
+  background: var(--surface-alt);
+  border-bottom: var(--border);
+}
+
+.explorer-title {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  color: var(--ink);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.tree-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--s-2);
+  background: var(--surface);
+}
+
+.tree-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--s-1) var(--s-2);
+  border-radius: var(--r-sm);
+  border: 2px solid transparent;
+  cursor: pointer;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--ink);
+  transition: background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+  margin-bottom: 2px;
+}
+
+.tree-row:hover {
+  background: var(--surface-alt);
+  border-color: var(--ink);
+}
+
+.tree-row.active {
+  background: var(--surface-muted);
+  border-color: var(--ink);
+  font-weight: var(--fw-bold);
+  box-shadow: var(--shadow-hard-sm);
+}
+
+.tree-left {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  min-width: 0;
+  flex: 1;
+}
+
+.tree-right {
+  display: flex;
+  align-items: center;
+  gap: var(--s-1);
+  margin-left: var(--s-2);
+}
+
+.diff-stat {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  color: var(--ink-muted);
+  font-family: var(--font-code);
+  background: var(--success);
+  border: 1px solid var(--ink);
+  padding: 0 var(--s-1);
+  border-radius: var(--r-sm);
+}
+
+.tree-actions {
+  display: none;
+  align-items: center;
+  gap: var(--s-1);
+}
+
+.tree-row:hover .tree-actions {
+  display: flex;
+}
+
+.tree-row:hover .diff-stat {
+  display: none;
+}
+
+/* Retro File Type Badges */
+.lang-badge {
+  width: 20px;
+  height: 20px;
+  border-radius: var(--r-sm);
+  border: 1.5px solid var(--ink);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  flex-shrink: 0;
+  color: var(--ink);
+}
+
+.lang-js {
+  background: var(--surface-alt);
+}
+
+.lang-ts {
+  background: var(--accent);
+}
+
+.lang-py {
+  background: var(--success);
+}
+
+.lang-java {
+  background: var(--danger);
+}
+
+.lang-cpp {
+  background: var(--surface-muted);
+}
+
+.lang-md {
+  background: var(--bg-page);
+}
+
+.peer-chip {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  padding: var(--s-2);
+  border-radius: var(--r-sm);
+  border: var(--border);
+  background: var(--surface-alt);
+  box-shadow: var(--shadow-hard-sm);
+  margin-bottom: var(--s-2);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  color: var(--ink);
+}
+
+.peer-dot {
+  width: var(--s-5);
+  height: var(--s-5);
+  border-radius: var(--r-sm);
+  border: var(--border);
+  background: var(--success);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-xs);
+  color: var(--ink);
+}

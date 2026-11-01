@@ -1,0 +1,67 @@
+:root {
+  /* Core Palette (By Role) */
+  --bg-page: #FFF8E1;
+  --surface: #FFFDF4;
+  --surface-alt: #FFE3B3;
+  --surface-muted: #EAD7D1;
+  --accent: #A3C4BC;
+  --success: #D9EAD3;
+  --danger: #F5CAC3;
+  --ink: #3A2E2A;
+  --ink-muted: #66564C; /* Darkened slightly from #7A6A60 to guarantee >= 4.5:1 contrast across both --surface and --surface-alt */
+
+  /* Warm Light Code Editor Syntax & Selection Tokens (>= 4.5:1 on --surface) */
+  --syntax-keyword: #9E3B24;
+  --syntax-string: #4E6B26;
+  --syntax-type: #23646E;
+  --syntax-comment: #756256;
+  --syntax-number: #633A7A;
+  --editor-line-highlight: rgba(255, 227, 179, 0.35);
+  --editor-selection: rgba(163, 196, 188, 0.35);
+  --backdrop-overlay: rgba(58, 46, 42, 0.45);
+  --page-grain: radial-gradient(rgba(58, 46, 42, 0.04) 1px, transparent 0);
+
+  /* Outlines, Hard Offset Shadows & Radii */
+  --border-width: 2px;
+  --border: 2px solid var(--ink);
+  --shadow-hard: 3px 3px 0 var(--ink);
+  --shadow-hard-sm: 2px 2px 0 var(--ink);
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 14px;
+
+  /* Spacing Scale (4, 8, 12, 16, 24, 32, 48) */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 24px;
+  --s-6: 32px;
+  --s-7: 48px;
+
+  /* Typography */
+  --font-ui: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-code: 'JetBrains Mono', monospace;
+  --fs-xs: 12px;
+  --fs-sm: 14px;
+  --fs-md: 16px;
+  --fs-lg: 20px;
+  --fs-xl: 28px;
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-bold: 700;
+
+  /* Motion */
+  --dur-fast: 120ms;
+  --dur-panel: 200ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  color-scheme: light;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-fast: 0ms;
+    --dur-panel: 0ms;
+  }
+}

@@ -4,6 +4,7 @@ import cors from 'cors';
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 
+import googleAuthRoutes from './modules/auth/google.routes.js';
 import errorHandler from './shared/middleware/errorHandler.js';
 import limiter from './shared/middleware/rateLimiter.js';
 import authRoutes from './modules/auth/auth.routes.js';
@@ -39,6 +40,7 @@ app.get('/health', (req, res) => {
   }
 });
 
+app.use('/api/auth', googleAuthRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/rooms', roomRoutes);
 app.use('/api/execute', executionRoutes);
