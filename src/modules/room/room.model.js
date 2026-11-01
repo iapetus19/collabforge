@@ -27,7 +27,7 @@ const roomSchema = new Schema(
     },
     language: {
       type: String,
-      enum: ['javascript', 'typescript', 'python', 'cpp', 'java', 'go', 'rust'],
+      enum: ['javascript', 'typescript', 'python', 'cpp', 'java'],
       default: 'javascript',
     },
     code: {

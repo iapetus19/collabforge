@@ -5,6 +5,7 @@ export const create = async (req, res) => {
     name: req.body.name,
     language: req.body.language,
     userId: req.user.id,
+    files: req.body.files,
   });
 
   res.status(201).json({

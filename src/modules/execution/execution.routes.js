@@ -291,9 +291,9 @@ router.post('/', authGuard, async (req, res) => {
     return res.status(200).json({
       success: true,
       data: {
-        output: 'Execution finished.',
-        stderr: '',
-        exitCode: 0,
+        output: '',
+        stderr: `Unsupported language: "${language}". Supported languages are: JavaScript, Python, Java, C++.`,
+        exitCode: 1,
         executionTimeMs: Math.round(performance.now() - start),
       },
     });

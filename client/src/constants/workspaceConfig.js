@@ -4,8 +4,6 @@ export const LANGUAGES = [
   { id: 'python', label: 'Python 3', ext: 'py' },
   { id: 'cpp', label: 'C++ 17 (GCC)', ext: 'cpp' },
   { id: 'java', label: 'Java (OpenJDK)', ext: 'java' },
-  { id: 'go', label: 'Go', ext: 'go' },
-  { id: 'rust', label: 'Rust', ext: 'rs' },
 ];
 
 export const getStarterFiles = (lang = 'javascript') => {

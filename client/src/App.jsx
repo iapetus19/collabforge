@@ -42,6 +42,7 @@ export default function App() {
   // Host approval & Terminal state
   const [incomingRequest, setIncomingRequest] = useState(null);
   const [waitingApproval, setWaitingApproval] = useState(false);
+  const [joinDenied, setJoinDenied] = useState(false);
   const [rightTab, setRightTab] = useState('terminal');
   const [running, setRunning] = useState(false);
   const [stdinInput, setStdinInput] = useState('');
@@ -103,6 +104,7 @@ export default function App() {
     setActivityBanner,
     setWaitingApproval,
     setIncomingRequest,
+    setJoinDenied,
     leaveRoomToDashboard,
   });
 
@@ -128,6 +130,7 @@ export default function App() {
     window.history.replaceState({}, '', `?room=${room.roomId}`);
 
     setActiveRoom(room);
+    setJoinDenied(false);
     const roomLang = room.language || 'javascript';
     const initialFiles =
       room.files && room.files.length > 0
@@ -257,7 +260,10 @@ export default function App() {
     setRightTab('terminal');
 
     const execLang = inferLanguageFromFilename(activeFileObj.name).runtime || language;
-    setTerminalLogs((prev) => [...prev, { type: 'cmd', text: `studio@workspace:~$ run ${activeFileObj.name}` }]);
+    setTerminalLogs((prev) => [
+      ...prev,
+      { type: 'cmd', text: `studio@workspace:~$ run ${activeFileObj.name}` },
+    ]);
 
     try {
       const result = await apiRequest('/api/execute', {
@@ -277,7 +283,10 @@ export default function App() {
         ...prev,
         ...(result.output ? [{ type: 'stdout', text: result.output }] : []),
         ...(result.stderr ? [{ type: 'stderr', text: result.stderr }] : []),
-        { type: 'meta', text: `[Exited with code ${result.exitCode ?? 0} • ${result.executionTimeMs}ms]` },
+        {
+          type: 'meta',
+          text: `[Exited with code ${result.exitCode ?? 0} • ${result.executionTimeMs}ms]`,
+        },
       ]);
     } catch (err) {
       setTerminalLogs((prev) => [...prev, { type: 'stderr', text: err.message }]);
@@ -337,7 +346,13 @@ export default function App() {
         incomingRequest={incomingRequest}
         activeRoomName={activeRoom.name}
         onCancelWait={leaveRoomToDashboard}
+        joinDenied={joinDenied}
+        onDismissDenied={() => {
+          setJoinDenied(false);
+          leaveRoomToDashboard();
+        }}
         onHostDecision={(approved) => {
+          if (!incomingRequest) return;
           socketRef.current?.emit('host-decision', {
             guestSocketId: incomingRequest.guestSocketId,
             guestUserId: incomingRequest.guestUserId,
@@ -367,6 +382,7 @@ export default function App() {
         saving={saving}
         onRun={handleRunCode}
         running={running}
+        participants={participants}
       />
 
       <div className="studio-body">

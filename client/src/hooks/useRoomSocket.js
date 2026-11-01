@@ -13,6 +13,7 @@ export function useRoomSocket({
   setActivityBanner,
   setWaitingApproval,
   setIncomingRequest,
+  setJoinDenied,
   leaveRoomToDashboard,
 }) {
   const socketRef = useRef(null);
@@ -39,12 +40,18 @@ export function useRoomSocket({
 
     socket.on('join-rejected', () => {
       setWaitingApproval(false);
-      alert('The room host declined your join request.');
-      leaveRoomToDashboard();
+      if (setJoinDenied) {
+        setJoinDenied(true);
+        setActivityBanner('Access request declined by host.');
+      } else {
+        alert('The room host declined your join request.');
+        leaveRoomToDashboard();
+      }
     });
 
     socket.on('join-approved', () => {
       setWaitingApproval(false);
+      if (setJoinDenied) setJoinDenied(false);
       socket.emit('join-room', {
         roomId: activeRoom.roomId,
         initialFiles: activeRoom.files?.length
