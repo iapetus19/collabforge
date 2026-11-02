@@ -18,7 +18,7 @@ router.post('/google', async (req, res, next) => {
       });
 
       if (!resp.ok) {
-        return res.status(401).json({ message: 'Invalid or expired Google access token.' });
+        return res.status(401).json({ status: 'fail', message: 'Invalid or expired Google access token.' });
       }
 
       const payload = await resp.json();
@@ -33,12 +33,12 @@ router.post('/google', async (req, res, next) => {
       );
 
       if (!resp.ok) {
-        return res.status(401).json({ message: 'Invalid Google ID token.' });
+        return res.status(401).json({ status: 'fail', message: 'Invalid Google ID token.' });
       }
 
       const payload = await resp.json();
       if (process.env.GOOGLE_CLIENT_ID && payload.aud !== process.env.GOOGLE_CLIENT_ID) {
-        return res.status(401).json({ message: 'Google token audience mismatch.' });
+        return res.status(401).json({ status: 'fail', message: 'Google token audience mismatch.' });
       }
 
       email = payload?.email?.toLowerCase() || '';
@@ -52,7 +52,7 @@ router.post('/google', async (req, res, next) => {
     }
 
     if (!email) {
-      return res.status(400).json({ message: 'Valid Google email is required.' });
+      return res.status(400).json({ status: 'fail', message: 'Valid Google email is required.' });
     }
 
     let user = await User.findOne({ email });
@@ -63,24 +63,33 @@ router.post('/google', async (req, res, next) => {
       user = await User.create({
         username: `${baseUsername}_${uniqueSuffix}`,
         email,
-        // Random high-entropy password so schema validation passes without altering auth.model.js
         password: crypto.randomBytes(24).toString('hex'),
       });
     }
 
+    const secret = process.env.JWT_ACCESS_SECRET || process.env.JWT_SECRET || 'collabforge-dev-secret';
     const accessToken = jwt.sign(
-      { id: user._id, username: user.username, email: user.email },
-      process.env.JWT_ACCESS_SECRET || 'collabforge-dev-secret',
+      { userId: user._id, id: user._id, username: user.username, email: user.email },
+      secret,
       { expiresIn: '7d' }
     );
 
+    const userPayload = {
+      id: user._id,
+      _id: user._id,
+      username: user.username,
+      email: user.email,
+      avatar: picture,
+    };
+
+    // Include both top-level and `data`-wrapped fields so apiRequest() unwraps cleanly
     return res.status(200).json({
+      status: 'success',
       accessToken,
-      user: {
-        id: user._id,
-        username: user.username,
-        email: user.email,
-        avatar: picture,
+      user: userPayload,
+      data: {
+        accessToken,
+        user: userPayload,
       },
     });
   } catch (err) {
