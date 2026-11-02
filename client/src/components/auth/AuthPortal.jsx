@@ -44,6 +44,22 @@ export default function AuthPortal({ onAuthSuccess }) {
     const pageRef = useRef(null);
     const canvasRef = useRef(null);
 
+    const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID?.trim();
+
+    // Dynamically load official Google Identity Services script if VITE_GOOGLE_CLIENT_ID is configured
+    useEffect(() => {
+        if (!googleClientId) return;
+        const scriptId = 'google-gsi-client';
+        if (document.getElementById(scriptId)) return;
+
+        const script = document.createElement('script');
+        script.id = scriptId;
+        script.src = 'https://accounts.google.com/gsi/client';
+        script.async = true;
+        script.defer = true;
+        document.body.appendChild(script);
+    }, [googleClientId]);
+
     // Interactive Retro Expanding Pixel Grid Engine (reads all colors from CSS variables)
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -226,6 +242,45 @@ export default function AuthPortal({ onAuthSuccess }) {
         } finally {
             setLoading(false);
         }
+    };
+
+    // Trigger real Google OAuth popup if VITE_GOOGLE_CLIENT_ID is set, otherwise open retro modal
+    const handleContinueWithGoogle = () => {
+        setAuthError('');
+
+        if (googleClientId && window.google?.accounts?.oauth2) {
+            const tokenClient = window.google.accounts.oauth2.initTokenClient({
+                client_id: googleClientId,
+                scope: 'openid email profile',
+                callback: async (tokenResponse) => {
+                    if (tokenResponse?.error || !tokenResponse?.access_token) {
+                        if (tokenResponse?.error && tokenResponse.error !== 'popup_closed_by_user') {
+                            setAuthError(`Google OAuth error: ${tokenResponse.error}`);
+                        }
+                        return;
+                    }
+                    setLoading(true);
+                    try {
+                        const data = await apiRequest('/api/auth/google', {
+                            method: 'POST',
+                            body: JSON.stringify({ accessToken: tokenResponse.access_token }),
+                        });
+                        setAuthSession(data.accessToken, data.user);
+                        window.history.replaceState({}, '', window.location.pathname);
+                        onAuthSuccess(data.user);
+                    } catch (err) {
+                        setAuthError(err.message || 'Google authentication failed.');
+                    } finally {
+                        setLoading(false);
+                    }
+                },
+            });
+            tokenClient.requestAccessToken({ prompt: 'select_account' });
+            return;
+        }
+
+        // Fallback to the retro modal if VITE_GOOGLE_CLIENT_ID is not configured
+        setShowGoogleModal(true);
     };
 
     const handleGoogleLogin = async (e) => {
@@ -452,7 +507,7 @@ export default function AuthPortal({ onAuthSuccess }) {
                                 className="btn btn-secondary"
                                 style={{ width: '100%' }}
                                 disabled={loading}
-                                onClick={() => setShowGoogleModal(true)}
+                                onClick={handleContinueWithGoogle}
                             >
                                 <span className="lang-badge lang-js" aria-hidden="true">
                                     G
@@ -480,7 +535,7 @@ export default function AuthPortal({ onAuthSuccess }) {
                 </section>
             </div>
 
-            {/* Google Account Modal */}
+            {/* Google Account Modal (Fallback when VITE_GOOGLE_CLIENT_ID is not set) */}
             {showGoogleModal && (
                 <div
                     className="modal-backdrop"
@@ -507,7 +562,13 @@ export default function AuthPortal({ onAuthSuccess }) {
                         </div>
 
                         <div className="window-body">
-                            <p style={{ fontSize: 'var(--fs-sm)', color: 'var(--ink-muted)', marginBottom: 'var(--s-4)' }}>
+                            <p
+                                style={{
+                                    fontSize: 'var(--fs-sm)',
+                                    color: 'var(--ink-muted)',
+                                    marginBottom: 'var(--s-4)',
+                                }}
+                            >
                                 Enter your Gmail address to continue to <strong>CollabForge Studio</strong>.
                             </p>
 
