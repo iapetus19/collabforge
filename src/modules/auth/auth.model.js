@@ -19,7 +19,21 @@ const userSchema = new Schema(
     },
     password: {
       type: String,
-      required: [true, 'password is required'],
+    required: [function () { return this.provider !== 'google'; }, 'Password is required'],
+    },
+    googleId: {
+      type: String,
+      unique: true,
+      sparse: true,
+    },
+    avatar: {
+      type: String,
+      default: null,
+    },
+    provider: {
+      type: String,
+      enum: ['local', 'google'],
+      default: 'local',
     },
     refreshToken: {
       type: String,
@@ -31,8 +45,8 @@ const userSchema = new Schema(
   }
 );
 
-userSchema.pre('save', async function(next) {
-  if (!this.isModified('password')) return;
+userSchema.pre('save', async function () {
+  if (!this.isModified('password') || !this.password) return;
   this.password = await bcrypt.hash(this.password, 12);
 });
 
