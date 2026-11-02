@@ -55,6 +55,11 @@ export const loginUser = async ({ email, password }) => {
     throw new AppError('Invalid email or password', ERROR_CODES.UNAUTHORIZED);
   }
 
+  if (!user.password) {
+    throw new AppError('Invalid email or password', ERROR_CODES.UNAUTHORIZED);
+  }
+
+
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {
     throw new AppError('Invalid email or password', ERROR_CODES.UNAUTHORIZED);
